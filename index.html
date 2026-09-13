@@ -9,148 +9,138 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#17313F;
-    --ink-soft:#4A6472;
-    --line:#D6DEE2;
-    --bg:#EDF1F2;
-    --card:#FFFFFF;
-    --main:#1F5E52;
-    --main-soft:#E4EFEB;
-    --warn:#8A6A12;
-    --warn-bg:#FBF1D6;
+    --ink:#16303D;
+    --ink-soft:#5A7280;
+    --line:#D8E0E3;
+    --line-strong:#B9C7CC;
+    --bg:#EBF0F1;
+    --main:#1D5A4F;
+    --main-mid:#2C7A6B;
+    --main-soft:#E3EFEB;
+    --amber:#8A6A12;
+    --amber-bg:#FAF0D6;
+    --amber-line:#DDB94F;
     --danger:#A33A2B;
   }
   *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
   body{
-    margin:0;
-    padding:20px 16px 56px;
-    background:var(--bg);
-    color:var(--ink);
+    margin:0;padding:0 0 60px;
+    background:var(--bg);color:var(--ink);
     font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-    font-size:18px;
-    line-height:1.7;
+    font-size:18px;line-height:1.7;
   }
-  .wrap{max-width:480px;margin:0 auto;}
+  .wrap{max-width:480px;margin:0 auto;padding:0 16px;}
 
-  header{margin-bottom:18px;}
-  h1{font-size:27px;line-height:1.35;margin:0 0 4px;font-weight:700;letter-spacing:.5px;}
-  .sub{margin:0;color:var(--ink-soft);font-size:17px;}
-
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:20px;
-    margin-bottom:16px;
+  .hero{
+    background:var(--main);color:#fff;
+    padding:30px 0 26px;margin-bottom:22px;
+    border-radius:0 0 22px 22px;
   }
-
-  .meta{display:flex;gap:14px;padding:6px 0;align-items:baseline;}
-  .meta + .meta{border-top:1px solid var(--line);}
-  .meta dt{width:3.6em;flex:none;color:var(--ink-soft);font-size:17px;margin:0;}
-  .meta dd{margin:0;font-weight:500;}
-  dl{margin:0;}
+  .hero h1{font-size:28px;line-height:1.3;margin:0 0 2px;font-weight:700;letter-spacing:1px;}
+  .hero p{margin:0;color:#B7D6CD;font-size:17px;}
+  .when{
+    margin:20px 0 0;background:rgba(255,255,255,.12);
+    border-radius:12px;padding:14px 16px;
+    display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:17px;
+  }
+  .when dt{color:#B7D6CD;}
+  .when dd{margin:0;font-weight:500;}
+  .when .big{font-size:19px;font-weight:700;}
 
   .park{
-    background:var(--warn-bg);
-    border-left:5px solid #D9B04A;
-    border-radius:10px;
-    padding:14px 16px;
-    margin-bottom:20px;
-    color:var(--warn);
-    font-size:17px;
+    background:var(--amber-bg);border:1px solid var(--amber-line);
+    border-radius:12px;padding:14px 16px;margin-bottom:20px;
+    color:var(--amber);font-size:17px;line-height:1.65;
   }
-  .park strong{display:block;color:#6B520B;margin-bottom:2px;}
+  .park strong{display:block;color:#6B520B;margin-bottom:2px;font-size:18px;}
 
-  label.q{display:block;font-weight:700;margin-bottom:10px;font-size:19px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 20px;}
   .field{margin-bottom:26px;}
-  .field:last-of-type{margin-bottom:18px;}
+  .field:last-of-type{margin-bottom:20px;}
+  .q{display:block;font-weight:700;font-size:19px;margin-bottom:10px;}
+  .row2{display:grid;grid-template-columns:34% 1fr;gap:12px;}
 
   input[type=text],textarea{
-    width:100%;
-    font:inherit;
-    color:inherit;
-    padding:13px 14px;
-    border:2px solid var(--line);
-    border-radius:10px;
-    background:#fff;
+    width:100%;font:inherit;color:inherit;padding:13px 14px;
+    border:2px solid var(--line-strong);border-radius:11px;background:#fff;
   }
-  textarea{min-height:88px;resize:vertical;}
-  input[type=text]:focus,textarea:focus{outline:3px solid #9FC6BB;border-color:var(--main);}
+  input::placeholder,textarea::placeholder{color:#9BADB5;}
+  textarea{min-height:86px;resize:vertical;}
+  input[type=text]:focus,textarea:focus{
+    outline:none;border-color:var(--main-mid);
+    box-shadow:0 0 0 4px rgba(44,122,107,.16);
+  }
+  input.bad,textarea.bad{border-color:var(--danger);}
 
   .choices{display:grid;gap:10px;}
   .split{grid-template-columns:1fr 1fr;}
   .four{grid-template-columns:repeat(4,1fr);}
   .opt{
-    display:block;
-    text-align:center;
-    padding:15px 6px;
-    border:2px solid var(--line);
-    border-radius:10px;
-    background:#fff;
-    font-size:19px;
-    font-weight:500;
-    cursor:pointer;
-    user-select:none;
+    display:block;text-align:center;padding:16px 6px;
+    border:2px solid var(--line-strong);border-radius:11px;background:#fff;
+    font-size:19px;font-weight:500;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
   }
-  .four .opt{padding:14px 2px;}
+  .four .opt{padding:15px 2px;font-size:18px;}
   .opt input{position:absolute;opacity:0;width:0;height:0;}
   .opt:has(input:checked){
-    border-color:var(--main);
-    background:var(--main-soft);
-    color:var(--main);
-    font-weight:700;
+    border-color:var(--main);background:var(--main-soft);
+    color:var(--main);font-weight:700;
   }
-  .opt:has(input:focus-visible){outline:3px solid #9FC6BB;}
+  .opt:has(input:focus-visible){box-shadow:0 0 0 4px rgba(44,122,107,.2);}
 
   #countField{display:none;}
   #countField.show{display:block;}
 
-  button.send{
-    width:100%;
-    font:inherit;
-    font-size:20px;
-    font-weight:700;
-    color:#fff;
-    background:var(--main);
-    border:none;
-    border-radius:10px;
-    padding:17px;
-    cursor:pointer;
+  .send{
+    width:100%;font:inherit;font-size:20px;font-weight:700;color:#fff;
+    background:var(--main);border:none;border-radius:12px;padding:18px;cursor:pointer;
   }
-  button.send:disabled{background:#8FA9A2;cursor:default;}
+  .send:disabled{background:#93AAA4;cursor:default;}
 
-  .err{color:var(--danger);font-size:17px;margin:12px 0 0;display:none;}
+  .err{
+    display:none;margin:14px 0 0;padding:13px 15px;
+    background:#F8E9E6;border-radius:10px;color:var(--danger);
+    font-size:17px;line-height:1.6;
+  }
   .err.show{display:block;}
 
-  .done{display:none;text-align:center;padding:34px 20px;}
-  .done.show{display:block;}
-  .done h2{font-size:24px;margin:0 0 12px;color:var(--main);}
-  .done p{margin:0 0 6px;color:var(--ink-soft);}
-  .done .recap{
-    margin-top:20px;
-    background:var(--main-soft);
-    border-radius:10px;
-    padding:14px;
-    color:var(--ink);
-    font-size:18px;
+  #done{display:none;text-align:center;padding:36px 22px;}
+  #done.show{display:block;}
+  .check{
+    width:62px;height:62px;margin:0 auto 16px;border-radius:50%;
+    background:var(--main-soft);display:flex;align-items:center;justify-content:center;
   }
-  .hint{color:var(--ink-soft);font-size:16px;margin:6px 0 0;}
+  .check svg{width:30px;height:30px;stroke:var(--main);stroke-width:3;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;}
+  #done h2{font-size:24px;margin:0 0 8px;color:var(--main);}
+  #done p{margin:0;color:var(--ink-soft);}
+  .recap{
+    margin:22px 0 20px;background:var(--main-soft);
+    border-radius:12px;padding:16px;font-size:19px;font-weight:500;
+  }
+  .again{
+    font:inherit;font-size:17px;font-weight:500;background:none;
+    border:2px solid var(--line-strong);border-radius:10px;
+    padding:11px 20px;color:var(--ink-soft);cursor:pointer;
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
+<div class="hero">
+  <div class="wrap">
     <h1>班親會出席回覆</h1>
-    <p class="sub">三年級一般智能資優班</p>
-  </header>
-
-  <div class="card">
-    <dl>
-      <div class="meta"><dt>時間</dt><dd>9 月 18 日（星期五）<br>晚上 6:00 – 6:50</dd></div>
-      <div class="meta"><dt>地點</dt><dd>資優三教室</dd></div>
+    <p>三年級一般智能資優班</p>
+    <dl class="when">
+      <dt>時間</dt><dd class="big">9/18（五）18:00 – 18:50</dd>
+      <dt>地點</dt><dd>資優三教室</dd>
     </dl>
   </div>
+</div>
+
+<div class="wrap">
 
   <div class="park">
     <strong>停車提醒</strong>
@@ -159,8 +149,11 @@
 
   <form id="form" class="card">
     <div class="field">
-      <label class="q" for="name">學生姓名</label>
-      <input type="text" id="name" autocomplete="off" placeholder="請填寫學生姓名">
+      <span class="q">班級與學生姓名</span>
+      <div class="row2">
+        <input type="text" id="klass" placeholder="班級" autocomplete="off">
+        <input type="text" id="name" placeholder="學生姓名" autocomplete="off">
+      </div>
     </div>
 
     <div class="field">
@@ -182,7 +175,7 @@
     </div>
 
     <div class="field">
-      <label class="q" for="note">想跟老師說的話</label>
+      <span class="q">想跟老師說的話</span>
       <textarea id="note" placeholder="沒有的話可以留空"></textarea>
     </div>
 
@@ -190,10 +183,14 @@
     <p class="err" id="err"></p>
   </form>
 
-  <section class="done card" id="done">
+  <section class="card" id="done">
+    <div class="check">
+      <svg viewBox="0 0 24 24"><polyline points="4 13 9 18 20 6"></polyline></svg>
+    </div>
     <h2>回覆完成</h2>
     <p>謝謝您，老師已經收到了。</p>
     <div class="recap" id="recap"></div>
+    <button class="again" id="again">再填一位孩子</button>
   </section>
 
 </div>
@@ -217,6 +214,7 @@ const db = getFirestore(initializeApp(firebaseConfig));
 const COLLECTION = "rsvp_20260918";
 
 const form  = document.getElementById("form");
+const klass = document.getElementById("klass");
 const name  = document.getElementById("name");
 const note  = document.getElementById("note");
 const send  = document.getElementById("send");
@@ -225,9 +223,14 @@ const done  = document.getElementById("done");
 const recap = document.getElementById("recap");
 const countField = document.getElementById("countField");
 
-function showError(msg){ err.textContent = msg; err.classList.add("show"); }
-function clearError(){ err.classList.remove("show"); }
+const showError = m => { err.textContent = m; err.classList.add("show"); };
+const clearError = () => {
+  err.classList.remove("show");
+  klass.classList.remove("bad");
+  name.classList.remove("bad");
+};
 
+form.addEventListener("input", clearError);
 form.addEventListener("change", e => {
   if (e.target.name === "attend") {
     countField.classList.toggle("show", e.target.value === "yes");
@@ -235,44 +238,67 @@ form.addEventListener("change", e => {
   }
 });
 
+document.getElementById("again").addEventListener("click", () => {
+  form.reset();
+  countField.classList.remove("show");
+  done.classList.remove("show");
+  form.style.display = "";
+  send.disabled = false;
+  send.textContent = "送出回覆";
+  klass.focus();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+const withTimeout = (p, ms = 12000) => Promise.race([
+  p,
+  new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))
+]);
+
 form.addEventListener("submit", async e => {
   e.preventDefault();
   clearError();
 
-  const studentName = name.value.trim();
+  const klassVal = klass.value.trim();
+  const nameVal  = name.value.trim();
   const attendEl = form.querySelector('input[name="attend"]:checked');
 
-  if (!studentName) { showError("請先填寫學生姓名。"); name.focus(); return; }
-  if (!attendEl)    { showError("請選擇當天會不會出席。"); return; }
+  if (!klassVal) { showError("請填寫班級。"); klass.classList.add("bad"); klass.focus(); return; }
+  if (!nameVal)  { showError("請填寫學生姓名。"); name.classList.add("bad"); name.focus(); return; }
+  if (!attendEl) { showError("請選擇當天會不會出席。"); return; }
 
   const attending = attendEl.value === "yes";
-  const count = attending
-    ? Number(form.querySelector('input[name="count"]:checked').value)
-    : 0;
+  const count = attending ? Number(form.querySelector('input[name="count"]:checked').value) : 0;
 
   send.disabled = true;
   send.textContent = "送出中…";
 
   try {
-    await addDoc(collection(db, COLLECTION), {
-      studentName,
+    await withTimeout(addDoc(collection(db, COLLECTION), {
+      klass: klassVal,
+      studentName: nameVal,
       attending,
       count,
       note: note.value.trim(),
       createdAt: serverTimestamp()
-    });
+    }));
 
     form.style.display = "none";
-    recap.innerHTML = attending
-      ? `${studentName}　家長 ${count} 位出席`
-      : `${studentName}　無法出席`;
+    recap.textContent = attending
+      ? `${klassVal} ${nameVal}　家長 ${count} 位出席`
+      : `${klassVal} ${nameVal}　無法出席`;
     done.classList.add("show");
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (e2) {
     console.error(e2);
     send.disabled = false;
     send.textContent = "送出回覆";
-    showError("送出失敗，請檢查網路後再按一次。若持續失敗，請直接聯絡老師。");
+    if (e2.code === "permission-denied") {
+      showError("資料庫目前不開放寫入，請直接告訴老師這個狀況。");
+    } else if (e2.message === "timeout") {
+      showError("送不出去，可能是網路不穩或資料庫尚未開通。請稍後再按一次，若還是不行請直接聯絡老師。");
+    } else {
+      showError("送出失敗，請檢查網路後再按一次。若持續失敗，請直接聯絡老師。");
+    }
   }
 });
 </script>
