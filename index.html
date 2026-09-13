@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>班親會出席回覆｜三年級資優班</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17313F;
+    --ink-soft:#4A6472;
+    --line:#D6DEE2;
+    --bg:#EDF1F2;
+    --card:#FFFFFF;
+    --main:#1F5E52;
+    --main-soft:#E4EFEB;
+    --warn:#8A6A12;
+    --warn-bg:#FBF1D6;
+    --danger:#A33A2B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:20px 16px 56px;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    font-size:18px;
+    line-height:1.7;
+  }
+  .wrap{max-width:480px;margin:0 auto;}
+
+  header{margin-bottom:18px;}
+  h1{font-size:27px;line-height:1.35;margin:0 0 4px;font-weight:700;letter-spacing:.5px;}
+  .sub{margin:0;color:var(--ink-soft);font-size:17px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:16px;
+  }
+
+  .meta{display:flex;gap:14px;padding:6px 0;align-items:baseline;}
+  .meta + .meta{border-top:1px solid var(--line);}
+  .meta dt{width:3.6em;flex:none;color:var(--ink-soft);font-size:17px;margin:0;}
+  .meta dd{margin:0;font-weight:500;}
+  dl{margin:0;}
+
+  .park{
+    background:var(--warn-bg);
+    border-left:5px solid #D9B04A;
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:20px;
+    color:var(--warn);
+    font-size:17px;
+  }
+  .park strong{display:block;color:#6B520B;margin-bottom:2px;}
+
+  label.q{display:block;font-weight:700;margin-bottom:10px;font-size:19px;}
+  .field{margin-bottom:26px;}
+  .field:last-of-type{margin-bottom:18px;}
+
+  input[type=text],textarea{
+    width:100%;
+    font:inherit;
+    color:inherit;
+    padding:13px 14px;
+    border:2px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+  }
+  textarea{min-height:88px;resize:vertical;}
+  input[type=text]:focus,textarea:focus{outline:3px solid #9FC6BB;border-color:var(--main);}
+
+  .choices{display:grid;gap:10px;}
+  .split{grid-template-columns:1fr 1fr;}
+  .four{grid-template-columns:repeat(4,1fr);}
+  .opt{
+    display:block;
+    text-align:center;
+    padding:15px 6px;
+    border:2px solid var(--line);
+    border-radius:10px;
+    background:#fff;
+    font-size:19px;
+    font-weight:500;
+    cursor:pointer;
+    user-select:none;
+  }
+  .four .opt{padding:14px 2px;}
+  .opt input{position:absolute;opacity:0;width:0;height:0;}
+  .opt:has(input:checked){
+    border-color:var(--main);
+    background:var(--main-soft);
+    color:var(--main);
+    font-weight:700;
+  }
+  .opt:has(input:focus-visible){outline:3px solid #9FC6BB;}
+
+  #countField{display:none;}
+  #countField.show{display:block;}
+
+  button.send{
+    width:100%;
+    font:inherit;
+    font-size:20px;
+    font-weight:700;
+    color:#fff;
+    background:var(--main);
+    border:none;
+    border-radius:10px;
+    padding:17px;
+    cursor:pointer;
+  }
+  button.send:disabled{background:#8FA9A2;cursor:default;}
+
+  .err{color:var(--danger);font-size:17px;margin:12px 0 0;display:none;}
+  .err.show{display:block;}
+
+  .done{display:none;text-align:center;padding:34px 20px;}
+  .done.show{display:block;}
+  .done h2{font-size:24px;margin:0 0 12px;color:var(--main);}
+  .done p{margin:0 0 6px;color:var(--ink-soft);}
+  .done .recap{
+    margin-top:20px;
+    background:var(--main-soft);
+    border-radius:10px;
+    padding:14px;
+    color:var(--ink);
+    font-size:18px;
+  }
+  .hint{color:var(--ink-soft);font-size:16px;margin:6px 0 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>班親會出席回覆</h1>
+    <p class="sub">三年級一般智能資優班</p>
+  </header>
+
+  <div class="card">
+    <dl>
+      <div class="meta"><dt>時間</dt><dd>9 月 18 日（星期五）<br>晚上 6:00 – 6:50</dd></div>
+      <div class="meta"><dt>地點</dt><dd>資優三教室</dd></div>
+    </dl>
+  </div>
+
+  <div class="park">
+    <strong>停車提醒</strong>
+    學校沒有提供停車位。育達高中有停車場，但名額有限，建議提早到或共乘。
+  </div>
+
+  <form id="form" class="card">
+    <div class="field">
+      <label class="q" for="name">學生姓名</label>
+      <input type="text" id="name" autocomplete="off" placeholder="請填寫學生姓名">
+    </div>
+
+    <div class="field">
+      <span class="q">當天會出席嗎？</span>
+      <div class="choices split">
+        <label class="opt"><input type="radio" name="attend" value="yes">會出席</label>
+        <label class="opt"><input type="radio" name="attend" value="no">無法出席</label>
+      </div>
+    </div>
+
+    <div class="field" id="countField">
+      <span class="q">家長出席人數</span>
+      <div class="choices four">
+        <label class="opt"><input type="radio" name="count" value="1" checked>1 位</label>
+        <label class="opt"><input type="radio" name="count" value="2">2 位</label>
+        <label class="opt"><input type="radio" name="count" value="3">3 位</label>
+        <label class="opt"><input type="radio" name="count" value="4">4 位</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="q" for="note">想跟老師說的話</label>
+      <textarea id="note" placeholder="沒有的話可以留空"></textarea>
+    </div>
+
+    <button type="submit" class="send" id="send">送出回覆</button>
+    <p class="err" id="err"></p>
+  </form>
+
+  <section class="done card" id="done">
+    <h2>回覆完成</h2>
+    <p>謝謝您，老師已經收到了。</p>
+    <div class="recap" id="recap"></div>
+  </section>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDlOpioJoUboSdLjCxw4_NPHt35fKx33bI",
+  authDomain: "talk-f532e.firebaseapp.com",
+  projectId: "talk-f532e",
+  storageBucket: "talk-f532e.firebasestorage.app",
+  messagingSenderId: "1050456675156",
+  appId: "1:1050456675156:web:1e8264347d616ab64d6ec1",
+  measurementId: "G-MFBVSSPW2W"
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const COLLECTION = "rsvp_20260918";
+
+const form  = document.getElementById("form");
+const name  = document.getElementById("name");
+const note  = document.getElementById("note");
+const send  = document.getElementById("send");
+const err   = document.getElementById("err");
+const done  = document.getElementById("done");
+const recap = document.getElementById("recap");
+const countField = document.getElementById("countField");
+
+function showError(msg){ err.textContent = msg; err.classList.add("show"); }
+function clearError(){ err.classList.remove("show"); }
+
+form.addEventListener("change", e => {
+  if (e.target.name === "attend") {
+    countField.classList.toggle("show", e.target.value === "yes");
+    clearError();
+  }
+});
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  clearError();
+
+  const studentName = name.value.trim();
+  const attendEl = form.querySelector('input[name="attend"]:checked');
+
+  if (!studentName) { showError("請先填寫學生姓名。"); name.focus(); return; }
+  if (!attendEl)    { showError("請選擇當天會不會出席。"); return; }
+
+  const attending = attendEl.value === "yes";
+  const count = attending
+    ? Number(form.querySelector('input[name="count"]:checked').value)
+    : 0;
+
+  send.disabled = true;
+  send.textContent = "送出中…";
+
+  try {
+    await addDoc(collection(db, COLLECTION), {
+      studentName,
+      attending,
+      count,
+      note: note.value.trim(),
+      createdAt: serverTimestamp()
+    });
+
+    form.style.display = "none";
+    recap.innerHTML = attending
+      ? `${studentName}　家長 ${count} 位出席`
+      : `${studentName}　無法出席`;
+    done.classList.add("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (e2) {
+    console.error(e2);
+    send.disabled = false;
+    send.textContent = "送出回覆";
+    showError("送出失敗，請檢查網路後再按一次。若持續失敗，請直接聯絡老師。");
+  }
+});
+</script>
+</body>
+</html>
