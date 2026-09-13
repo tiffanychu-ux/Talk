@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>班親會回覆統計｜後台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17313F;
+    --ink-soft:#4A6472;
+    --line:#D6DEE2;
+    --bg:#EDF1F2;
+    --main:#1F5E52;
+    --main-soft:#E4EFEB;
+    --danger:#A33A2B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;padding:20px 16px 60px;
+    background:var(--bg);color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    font-size:17px;line-height:1.65;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  h1{font-size:25px;margin:0 0 4px;}
+  .sub{margin:0 0 20px;color:var(--ink-soft);}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px;}
+
+  /* 密碼頁 */
+  #gate{max-width:360px;margin:60px auto;}
+  #gate input{width:100%;font:inherit;font-size:20px;text-align:center;letter-spacing:6px;
+    padding:14px;border:2px solid var(--line);border-radius:10px;margin-bottom:12px;}
+  #gate button,.btn{
+    font:inherit;font-weight:700;color:#fff;background:var(--main);
+    border:none;border-radius:10px;padding:13px 18px;cursor:pointer;
+  }
+  #gate button{width:100%;font-size:19px;padding:15px;}
+  .btn.ghost{background:#fff;color:var(--main);border:2px solid var(--main);}
+  .gate-err{color:var(--danger);text-align:center;min-height:1.6em;margin:8px 0 0;}
+
+  #panel{display:none;}
+  #panel.show{display:block;}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;}
+  .stat b{display:block;font-size:32px;line-height:1.2;color:var(--main);}
+  .stat span{color:var(--ink-soft);font-size:16px;}
+  .stat.total b{color:var(--ink);}
+
+  .bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+  .bar .grow{flex:1;}
+  .live{color:var(--ink-soft);font-size:16px;}
+
+  table{width:100%;border-collapse:collapse;}
+  th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-size:16px;color:var(--ink-soft);font-weight:500;white-space:nowrap;}
+  td.name{font-weight:700;white-space:nowrap;}
+  .tag{display:inline-block;padding:3px 11px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;}
+  .tag.yes{background:var(--main-soft);color:var(--main);}
+  .tag.no{background:#F0E3E1;color:var(--danger);}
+  td.note{color:var(--ink-soft);font-size:16px;min-width:9em;}
+  td.time{color:var(--ink-soft);font-size:15px;white-space:nowrap;}
+  .del{background:none;border:none;color:var(--ink-soft);font:inherit;font-size:15px;cursor:pointer;padding:4px;}
+  .del:hover{color:var(--danger);}
+  .empty{text-align:center;color:var(--ink-soft);padding:40px 10px;}
+  .scroll{overflow-x:auto;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card" id="gate">
+    <h1 style="font-size:21px;text-align:center;margin-bottom:14px;">班親會回覆統計</h1>
+    <input type="password" id="pw" inputmode="numeric" placeholder="密碼" autocomplete="off">
+    <button id="enter">進入</button>
+    <p class="gate-err" id="gateErr"></p>
+  </div>
+
+  <div id="panel">
+    <h1>班親會回覆統計</h1>
+    <p class="sub">9/18（五）18:00–18:50　資優三教室</p>
+
+    <div class="stats">
+      <div class="stat total"><b id="sTotal">0</b><span>已回覆</span></div>
+      <div class="stat"><b id="sYes">0</b><span>會出席（戶）</span></div>
+      <div class="stat"><b id="sPeople">0</b><span>家長總人數</span></div>
+    </div>
+
+    <div class="bar">
+      <button class="btn" id="csv">下載 Excel 名單</button>
+      <button class="btn ghost" id="logout">登出</button>
+      <span class="grow"></span>
+      <span class="live" id="live">連線中…</span>
+    </div>
+
+    <div class="card scroll">
+      <table>
+        <thead>
+          <tr><th>學生姓名</th><th>出席</th><th>人數</th><th>想說的話</th><th>填寫時間</th><th></th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="empty" id="empty">還沒有人回覆。</p>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDlOpioJoUboSdLjCxw4_NPHt35fKx33bI",
+  authDomain: "talk-f532e.firebaseapp.com",
+  projectId: "talk-f532e",
+  storageBucket: "talk-f532e.firebasestorage.app",
+  messagingSenderId: "1050456675156",
+  appId: "1:1050456675156:web:1e8264347d616ab64d6ec1",
+  measurementId: "G-MFBVSSPW2W"
+};
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const COLLECTION = "rsvp_20260918";
+const PASSWORD = "072929";
+
+const gate = document.getElementById("gate");
+const panel = document.getElementById("panel");
+const pw = document.getElementById("pw");
+const gateErr = document.getElementById("gateErr");
+
+function unlock(){
+  gate.style.display = "none";
+  panel.classList.add("show");
+  listen();
+}
+function tryEnter(){
+  if (pw.value.trim() === PASSWORD) {
+    sessionStorage.setItem("rsvpAdmin", "1");
+    unlock();
+  } else {
+    gateErr.textContent = "密碼不對，再試一次。";
+    pw.value = "";
+    pw.focus();
+  }
+}
+document.getElementById("enter").addEventListener("click", tryEnter);
+pw.addEventListener("keydown", e => { if (e.key === "Enter") tryEnter(); });
+document.getElementById("logout").addEventListener("click", () => {
+  sessionStorage.removeItem("rsvpAdmin");
+  location.reload();
+});
+if (sessionStorage.getItem("rsvpAdmin") === "1") unlock();
+
+let data = [];
+const rows = document.getElementById("rows");
+const empty = document.getElementById("empty");
+
+function fmt(ts){
+  if (!ts || !ts.toDate) return "—";
+  const d = ts.toDate();
+  const p = n => String(n).padStart(2, "0");
+  return `${d.getMonth()+1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function esc(s){
+  return String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
+
+function listen(){
+  const q = query(collection(db, COLLECTION), orderBy("createdAt", "desc"));
+  onSnapshot(q, snap => {
+    data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+    document.getElementById("live").textContent = "資料即時更新中";
+  }, e => {
+    console.error(e);
+    document.getElementById("live").textContent = "讀取失敗，請重新整理";
+  });
+}
+
+function render(){
+  document.getElementById("sTotal").textContent = data.length;
+  document.getElementById("sYes").textContent = data.filter(d => d.attending).length;
+  document.getElementById("sPeople").textContent =
+    data.reduce((s, d) => s + (d.attending ? Number(d.count || 0) : 0), 0);
+
+  empty.style.display = data.length ? "none" : "block";
+  rows.innerHTML = data.map(d => `
+    <tr>
+      <td class="name">${esc(d.studentName)}</td>
+      <td>${d.attending ? '<span class="tag yes">會出席</span>' : '<span class="tag no">無法出席</span>'}</td>
+      <td>${d.attending ? esc(d.count) + " 位" : "—"}</td>
+      <td class="note">${esc(d.note) || "—"}</td>
+      <td class="time">${fmt(d.createdAt)}</td>
+      <td><button class="del" data-id="${d.id}" data-name="${esc(d.studentName)}">刪除</button></td>
+    </tr>`).join("");
+}
+
+rows.addEventListener("click", async e => {
+  const btn = e.target.closest(".del");
+  if (!btn) return;
+  if (!confirm(`要刪除「${btn.dataset.name}」這筆回覆嗎？刪除後無法復原。`)) return;
+  try {
+    await deleteDoc(doc(db, COLLECTION, btn.dataset.id));
+  } catch (err) {
+    console.error(err);
+    alert("刪除失敗，請重新整理後再試。");
+  }
+});
+
+document.getElementById("csv").addEventListener("click", () => {
+  const head = ["學生姓名", "出席", "家長人數", "想說的話", "填寫時間"];
+  const body = data.map(d => [
+    d.studentName,
+    d.attending ? "會出席" : "無法出席",
+    d.attending ? d.count : 0,
+    d.note || "",
+    fmt(d.createdAt)
+  ]);
+  const csv = [head, ...body]
+    .map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))
+    .join("\r\n");
+  const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "班親會出席名單_0918.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
